@@ -1,0 +1,8 @@
+# IDE and local workspace files
+.idea/
+.vscode/
+dist/
+
+# OS metadata
+.DS_Store
+Thumbs.db

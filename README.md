@@ -1,73 +1,104 @@
 # HostFlip
 
-A tiny Chrome/Edge (Manifest V3) browser extension that toggles the current tab
-between your **development domain** and your **production domain**, preserving the
-path, query string and hash.
+HostFlip is a small, privacy-first Chrome and Microsoft Edge extension that
+switches the active tab between a development host and a production host while
+preserving its path, query string, and hash.
 
-```
+```text
 http://localhost:4200/orders/42?tab=lines#top
-        (press the shortcut)
+        press Alt+Shift+V
 https://github.com/orders/42?tab=lines#top
 ```
 
+## Why HostFlip?
+
+Moving between a local app and its deployed version usually means editing the
+same URL by hand. HostFlip makes that transition one keyboard shortcut away.
+It performs the URL transformation locally in the browser and does not collect
+or transmit browsing data.
+
 ## Features
 
-- Configure a **development domain** and a **production domain**.
-  Configuration is **optional** — sensible defaults apply out of the box:
-  - Development domain default: `localhost:4200`
-  - Production domain default: `github.com`
-- Optional keyboard shortcut (suggested default: `Alt+Shift+V`).
-- **Clicking the toolbar icon opens the settings page** to update the
-  development domain, production domain and shortcut.
-- **Toggle by pressing the keyboard shortcut.**
-- Keeps everything after the host (path, `?query`, `#hash`).
-- If the current host matches neither domain, a message pops up **on the page**
-  (with an OS-notification fallback) instead of navigating.
+- Configure a development host and a production host, including ports.
+- Sensible defaults work immediately: `localhost:4200` and `github.com`.
+- Preserve the path, query string, and hash when switching.
+- Use an optional browser keyboard shortcut (suggested default: `Alt+Shift+V`).
+- Open settings by clicking the toolbar icon.
+- Show a helpful message instead of navigating when the current host does not
+  match either configured host.
+- Use `http` for local hosts and `https` for other hosts.
 
-## Install (unpacked)
+## Install for development
 
-1. Open `chrome://extensions` (or `edge://extensions`).
-2. Enable **Developer mode**.
-3. Click **Load unpacked** and select the `HostFlip` folder.
-4. It works immediately with the defaults. To customise, open the settings page
-   (it opens automatically on install, or click the toolbar icon) and set:
-   - **Development domain**, e.g. `localhost:4200` or `dev.example.com`
-   - **Production domain**, e.g. `github.com` or `app.example.com`
-5. Click **Save configuration**.
+HostFlip is currently distributed as an unpacked extension for local use.
 
-## Set / change the keyboard shortcut
+1. Clone or download this repository.
+2. Open `chrome://extensions` in Chrome or `edge://extensions` in Edge.
+3. Enable **Developer mode**.
+4. Select **Load unpacked** and choose the repository folder.
+5. Configure your hosts from the settings page. It opens after installation, or
+   you can click the HostFlip toolbar icon.
 
-The shortcut is optional. Set or change it at:
+The extension has no build step or package installation. Changes to the
+extension files can be tested by selecting **Reload** on its extensions page.
 
-- Chrome: `chrome://extensions/shortcuts`
-- Edge: `edge://extensions/shortcuts`
+## Configure and use
 
-The **Change shortcut…** button on the settings page opens that page for you.
+1. Enter the development and production hosts without a protocol, for example
+   `localhost:4200` and `app.example.com`.
+2. Click **Save configuration**.
+3. Set or change the shortcut from the settings page, or from:
+   - Chrome: `chrome://extensions/shortcuts`
+   - Edge: `edge://extensions/shortcuts`
+4. Open a page on either configured host and press the shortcut.
 
-## How toggling works
+Host comparison includes the port, so `localhost:4200` and `localhost:3000`
+are different hosts. Only `http` and `https` pages can be toggled.
 
-Press the keyboard shortcut to toggle. Clicking the toolbar icon opens the
-settings page instead. The host comparison includes the port, so
-`localhost:4200` and `localhost:3000` are treated as different hosts.
+## Privacy and permissions
 
-| Current page host       | Result                                     |
-| ----------------------- | ------------------------------------------ |
-| your development domain | Switches to the production domain          |
-| your production domain  | Switches to the development domain         |
-| any other host          | No change; a message explains the mismatch |
+HostFlip stores only the two configured hosts using the browser's
+`storage.sync` API. It does not collect, sell, or transmit personal data.
+URLs are read and transformed locally only when you invoke the toggle.
 
-The target scheme is chosen automatically: `http` for local hosts
-(`localhost`, `127.0.0.1`, `0.0.0.0`, `::1`), `https` otherwise. Only
-`http`/`https` pages can be toggled.
+The extension requests these permissions:
 
-## Files
+| Permission | Purpose |
+| --- | --- |
+| `storage` | Save the configured hosts. |
+| `tabs` | Read and navigate the active tab. |
+| `scripting` | Show an on-page message when a toggle is unavailable. |
+| `notifications` | Provide a fallback message on restricted pages. |
 
-| File            | Purpose                                            |
-| --------------- | -------------------------------------------------- |
-| `manifest.json` | Extension manifest (MV3), action + command.        |
-| `background.js` | Service worker: handles click, shortcut, messages. |
-| `toggle.js`     | Shared config + URL-toggling logic.                |
-| `options.html`  | Settings / configuration page.                     |
-| `options.css`   | Styling for the settings page.                     |
-| `options.js`    | Settings page behaviour.                            |
-| `icons/`        | Toolbar and store icons.                           |
+Read the full [privacy policy](PRIVACY.md) for details.
+
+## Project structure
+
+| File | Purpose |
+| --- | --- |
+| `manifest.json` | Manifest V3 metadata, permissions, action, and command. |
+| `background.js` | Service worker for the toolbar action and shortcut. |
+| `toggle.js` | Shared configuration and URL-toggling logic. |
+| `options.html` | Settings page markup. |
+| `options.css` | Settings page styling. |
+| `options.js` | Settings page behavior. |
+| `icons/` | Extension icons. |
+
+## Contributing
+
+Contributions are welcome, including bug reports, documentation improvements,
+accessibility fixes, browser compatibility feedback, and new features. Please
+read [CONTRIBUTING.md](CONTRIBUTING.md) before opening an issue or pull
+request. By participating, you agree to follow the
+[Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Support and security
+
+- For questions and usage help, see [SUPPORT.md](SUPPORT.md).
+- For bugs and feature ideas, use the repository's issue tracker.
+- For security concerns, follow [SECURITY.md](SECURITY.md) rather than posting
+  sensitive details publicly.
+
+## License
+
+HostFlip is released under the [MIT License](LICENSE).
