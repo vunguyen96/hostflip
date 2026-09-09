@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HostFlip &mdash; Setup</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main class="card">
+      <header class="head">
+        <div class="logo">&#8644;</div>
+        <div>
+          <h1>HostFlip</h1>
+          <p class="sub">Toggle the current tab between development and production.</p>
+        </div>
+      </header>
+
+      <form id="config-form" novalidate>
+        <label class="field">
+          <span class="label">Development domain <em class="opt">optional</em></span>
+          <input
+            id="developmentDomain"
+            name="developmentDomain"
+            type="text"
+            placeholder="localhost:4200"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <small class="hint">Host and optional port, no protocol. Default: <code>localhost:4200</code> &rarr; <code>http://localhost:4200/&hellip;</code></small>
+        </label>
+
+        <label class="field">
+          <span class="label">Production domain <em class="opt">optional</em></span>
+          <input
+            id="productionDomain"
+            name="productionDomain"
+            type="text"
+            placeholder="github.com"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <small class="hint">Host only, no protocol. Default: <code>github.com</code> &rarr; <code>https://github.com/&hellip;</code></small>
+        </label>
+
+        <div class="field">
+          <span class="label">Keyboard shortcut <em class="opt">optional</em></span>
+          <p class="shortcut-line">
+            Current: <kbd id="shortcut-display">not set</kbd>
+          </p>
+          <button type="button" id="edit-shortcut" class="link-btn">Change shortcut&hellip;</button>
+          <small class="hint">Opens the browser shortcuts page. Default suggestion: <kbd>Alt+Shift+V</kbd>.</small>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="primary" id="save-btn">Save configuration</button>
+          <span id="status" class="status" role="status" aria-live="polite"></span>
+        </div>
+      </form>
+
+      <section class="preview">
+        <h2>How it works</h2>
+        <p>
+          <strong>Clicking the toolbar icon opens this settings page.</strong>
+          To switch environments, press your keyboard shortcut. If the current
+          page is on your development domain it jumps to production; if it is on
+          your production domain it jumps back to development. The path, query
+          string and hash are always preserved. If the current host matches
+          neither domain, HostFlip shows a message on the page instead of
+          navigating. Configuration is optional &mdash; the defaults
+          (<code>localhost:4200</code> and <code>github.com</code>) apply until
+          you change them.
+        </p>
+      </section>
+    </main>
+
+    <script type="module" src="options.js"></script>
+  </body>
+</html>
